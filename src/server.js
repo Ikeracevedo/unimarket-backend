@@ -32,4 +32,3 @@ io.on('connection', (socket) => {
 server.listen(PORT, async () => {
   console.log(`Servidor corriendo en puerto ${PORT}`)
   await conectarDB() // Conectar a la base de datos al iniciar el servidor
-})
