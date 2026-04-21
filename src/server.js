@@ -3,6 +3,8 @@ const { Server } = require('socket.io')
 require('dotenv').config()
 
 const app = require('./app')
+const { conectarDB } = require('./config/database')
+
 
 const PORT = process.env.PORT || 3000
 
@@ -27,6 +29,7 @@ io.on('connection', (socket) => {
 })
 
 // Levantar servidor
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`Servidor corriendo en puerto ${PORT}`)
+  await conectarDB() // Conectar a la base de datos al iniciar el servidor
 })
