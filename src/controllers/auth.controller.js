@@ -19,8 +19,8 @@ const registrarUsuario = async (req, res) => {
 
 const loginUsuario = async (req, res) => {
   try {
-    const { identificador, contrasena } = req.body
-    const resultado = await login(identificador, contrasena)
+    const { identificador, password } = req.body
+    const resultado = await login(identificador, password)
     res.status(200).json({
       ok: true,
       mensaje: 'Login exitoso',
