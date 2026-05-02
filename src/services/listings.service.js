@@ -1,4 +1,4 @@
-const { crearPublicaciones } = require('../repositories/listings.repository')
+const { crearPublicacion, obtenerPublicaciones, obtenerPublicacionPorId, actualizarPublicacion, eliminarPublicacion } = require('../repositories/listings.repository')
 
 const CATEGORIAS_VALIDAS = ['compraventa','servicios','alimentos']
 
@@ -34,7 +34,9 @@ const publicar = async (datos, seller_id) => {
         }
     }
 
-    const nuevaPublicacion = await crearPublicaciones({
+    
+
+    const nuevaPublicacion = await crearPublicacion({
         seller_id,
         category,
         title,
@@ -46,6 +48,57 @@ const publicar = async (datos, seller_id) => {
 
     return nuevaPublicacion
 
+
+
 }
 
-module.exports = { publicar }
+const listar = async (filtros) => {
+    const page = parseInt(filtros.page) || 1
+    const limit = parseInt(filtros.limit) || 10
+  
+    return await obtenerPublicaciones({
+      category: filtros.category || null,
+      seller_id: filtros.seller_id || null,
+      fecha_desde: filtros.fecha_desde || null,
+      page,
+      limit
+    })
+  }
+  
+const obtenerUna = async (id) => {
+const publicacion = await obtenerPublicacionPorId(id)
+if (!publicacion) {
+    throw new Error('Publicación no encontrada')
+}
+return publicacion
+}
+  
+const actualizar = async (id, datos, usuario_id) => {
+const publicacion = await obtenerPublicacionPorId(id)
+
+if (!publicacion) {
+    throw new Error('Publicación no encontrada')
+}
+
+if (publicacion.seller_id !== usuario_id) {
+    throw new Error('No tienes permiso para editar esta publicación')
+}
+
+return await actualizarPublicacion(id, datos)
+}
+  
+const eliminar = async (id, usuario_id) => {
+const publicacion = await obtenerPublicacionPorId(id)
+
+if (!publicacion) {
+    throw new Error('Publicación no encontrada')
+}
+
+if (publicacion.seller_id !== usuario_id) {
+    throw new Error('No tienes permiso para eliminar esta publicación')
+}
+
+return await eliminarPublicacion(id)
+}
+
+module.exports = { publicar, listar, obtenerUna, actualizar, eliminar }
