@@ -6,6 +6,8 @@ const morgan = require('morgan')
 const app = express()
 
 const authRoutes = require('./routes/auth.routes')
+const listingsRoutes = require('./routes/listings.routes')
+
 
 // Middlewares globales
 app.use(helmet())           // Cabeceras de seguridad automaticamente
@@ -13,6 +15,8 @@ app.use(cors())         // Permite que se conecten a hacer peticiones desde otro
 app.use(morgan('dev'))              //Logea cada request en consola 
 app.use(express.json())         //Permite leer peticiones en formateo JSON
 app.use(express.urlencoded({ extended: true }))         //Pertmite leer datros de formularios HTML
+app.use('/api/listings', listingsRoutes)
+
 
 // Rutas
 app.use('/api/auth', authRoutes)

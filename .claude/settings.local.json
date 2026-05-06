@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Iker\\\\Documents\\\\Universidad Pontificia Bolivariana\\\\Primer semestre\\\\Ingenieria de Software\\\\ProyectoFinal\\\\UniMarket-Backend\" -Recurse -Force)",
+      "Bash(Select-Object FullName)"
+    ]
+  }
+}
