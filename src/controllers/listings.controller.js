@@ -32,7 +32,8 @@ const actualizarPublicacion = async (req, res) => {
     const publicacion = await actualizar(req.params.id, req.body, req.usuario.id)
     res.status(200).json({ ok: true, mensaje: 'Publicación actualizada', datos: publicacion })
   } catch (error) {
-    res.status(400).json({ ok: false, mensaje: error.message, datos: null })
+    const status = error.message === 'Publicación no encontrada' ? 404 : 400
+    res.status(status).json({ ok: false, mensaje: error.message, datos: null })
   }
 }
 
@@ -41,7 +42,8 @@ const eliminarPublicacion = async (req, res) => {
     await eliminar(req.params.id, req.usuario.id)
     res.status(200).json({ ok: true, mensaje: 'Publicación eliminada', datos: null })
   } catch (error) {
-    res.status(400).json({ ok: false, mensaje: error.message, datos: null })
+    const status = error.message === 'Publicación no encontrada' ? 404 : 400
+    res.status(status).json({ ok: false, mensaje: error.message, datos: null })
   }
 }
 

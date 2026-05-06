@@ -41,14 +41,24 @@ const obtenerPublicaciones = async ({ category, seller_id, fecha_desde, page, li
 
     const where = condiciones.length > 0 ? `WHERE ${condiciones.join(' AND ')}` : ''
 
+    const conteo = await pool.query(
+        `SELECT COUNT(*) FROM listings ${where}`,
+        valores
+    )
+
     const resultado = await pool.query(
-        `SELECT * FROM listings ${where} 
-         ORDER BY created_at DESC 
+        `SELECT * FROM listings ${where}
+         ORDER BY created_at DESC
          LIMIT $${contador} OFFSET $${contador + 1}`,
         [...valores, limit, offset]
     )
 
-    return resultado.rows
+    return {
+        publicaciones: resultado.rows,
+        total: parseInt(conteo.rows[0].count),
+        pagina: Math.floor(offset / limit) + 1,
+        totalPaginas: Math.ceil(parseInt(conteo.rows[0].count) / limit)
+    }
 
 }
 

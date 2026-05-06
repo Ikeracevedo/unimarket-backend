@@ -15,6 +15,10 @@ const publicar = async (datos, seller_id) => {
         throw new Error('Título, descripción y precio son obligatorios')
     }
 
+    if (isNaN(price) || Number(price) <= 0) {
+        throw new Error('El precio debe ser un número mayor a 0')
+    }
+
     // Validar extra_data según categoría
     if (category === 'alimentos') {
         if (!extra_data?.horario_inicio || !extra_data?.horario_fin) {
