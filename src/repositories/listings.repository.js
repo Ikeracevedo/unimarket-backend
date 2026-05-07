@@ -99,11 +99,23 @@ const obtenerPublicacionPorId = async (id) => {
     return resultado.rows[0]
   }
 
+  const actualizarDisponibilidad = async (id, is_available) => {
+    const resultado = await pool.query(
+      `UPDATE listings 
+       SET is_available = $1
+       WHERE id = $2
+       RETURNING id, title, is_available`,
+      [is_available, id]
+    )
+    return resultado.rows[0]
+  }
+
 
 module.exports = { 
   crearPublicacion, 
   obtenerPublicaciones, 
   obtenerPublicacionPorId,
   actualizarPublicacion,
-  eliminarPublicacion
+  eliminarPublicacion,
+  actualizarDisponibilidad
 }

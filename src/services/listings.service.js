@@ -1,4 +1,4 @@
-const { crearPublicacion, obtenerPublicaciones, obtenerPublicacionPorId, actualizarPublicacion, eliminarPublicacion } = require('../repositories/listings.repository')
+const { crearPublicacion, obtenerPublicaciones, obtenerPublicacionPorId, actualizarPublicacion, eliminarPublicacion, actualizarDisponibilidad } = require('../repositories/listings.repository')
 
 const CATEGORIAS_VALIDAS = ['compraventa','servicios','alimentos']
 
@@ -105,4 +105,19 @@ if (publicacion.seller_id !== usuario_id) {
 return await eliminarPublicacion(id)
 }
 
-module.exports = { publicar, listar, obtenerUna, actualizar, eliminar }
+const cambiarDisponibilidad = async (id, is_available, usuario_id) => {
+    const publicacion = await obtenerPublicacionPorId(id);
+
+    if(!publicacion){
+        throw new Error('Publicacion no encontrada')
+    }
+
+    if (publicacion.seller_id !== usuario_id) {
+        throw new Error('No tienes permiso para modificar esta publicación')
+    }
+
+    return await actualizarDisponibilidad(id, is_available)
+}
+
+
+module.exports = { publicar, listar, obtenerUna, actualizar, eliminar, cambiarDisponibilidad }
