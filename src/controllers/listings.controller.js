@@ -1,4 +1,4 @@
-const { publicar, listar, obtenerUna, actualizar, eliminar } = require('../services/listings.service')
+const { publicar, listar, obtenerUna, actualizar, eliminar, cambiarDisponibilidad } = require('../services/listings.service')
 
 const crearPublicacion = async (req, res) => {
   try {
@@ -47,4 +47,14 @@ const eliminarPublicacion = async (req, res) => {
   }
 }
 
-module.exports = { crearPublicacion, listarPublicaciones, obtenerPublicacion, actualizarPublicacion, eliminarPublicacion }
+const actualizarDisponibilidad = async (req, res) => {
+  try {
+    const publicacion = await cambiarDisponibilidad(req.params.id, req.body.is_available, req.usuario.id)
+    res.status(200).json({ok: true, mensaje: 'Disponibilidad actualizada', datos: publicacion})
+  } catch (error) {
+    const status = error.message === 'Publicación no encontrada' ? 404 : 400
+    res.status(status).json({ ok: false, mensaje: error.message, datos: null })
+  }
+}
+
+module.exports = { crearPublicacion, listarPublicaciones, obtenerPublicacion, actualizarPublicacion, eliminarPublicacion, actualizarDisponibilidad  }
